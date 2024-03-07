@@ -14,8 +14,13 @@ jobs:
     continue-on-error: ${{ matrix.checks == 'sources' }}
 
     steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+      with:
+        egress-policy: audit
+
     - name: Checkout sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       with:
         submodules: recursive
     - name: Apply patch
@@ -23,6 +28,6 @@ jobs:
       run: |
           ./sh_script/pre-build.sh
 
-    - uses: EmbarkStudios/cargo-deny-action@v1
+    - uses: EmbarkStudios/cargo-deny-action@64015a69ee7ee08f6c56455089cdaf6ad974fd15 # v1.6.1
       with:
         command: check ${{ matrix.checks }}
